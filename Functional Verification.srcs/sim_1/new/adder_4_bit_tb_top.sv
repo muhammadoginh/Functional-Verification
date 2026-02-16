@@ -1,0 +1,91 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02/16/2026 07:50:42 PM
+// Design Name: 
+// Module Name: adder_4_bit_tb_top
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: https://docs.amd.com/r/2021.2-English/ug937-vivado-design-suite-simulation-tutorial/Lab-5-Running-UVM-example
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+`ifndef ADDER_4_BIT_TB_TOP
+`define ADDER_4_BIT_TB_TOP
+ `include "uvm_macros.svh"
+`include "adder_4_bit_interface.sv"
+import uvm_pkg::*;
+module adder_4_bit_tb_top;
+   
+ 
+  import adder_4_bit_test_list::*;
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Declaration of Local Fields
+  //////////////////////////////////////////////////////////////////////////////
+  parameter cycle = 10 ;
+  bit clk;
+  bit reset;
+  //////////////////////////////////////////////////////////////////////////////
+  //clock generation
+  //////////////////////////////////////////////////////////////////////////////
+  initial begin
+     clk=0;
+     forever #(cycle/2) clk=~clk;
+  end
+  //////////////////////////////////////////////////////////////////////////////
+  //reset Generation : change may required while generating reset for 
+  //                   synchronous/Asynchronous or Active low/Active high
+  //////////////////////////////////////////////////////////////////////////////
+  initial begin
+    reset = 1;  
+    #(cycle* 5) reset =0;
+  end
+  //////////////////////////////////////////////////////////////////////////////
+  //creatinng instance of interface, inorder to connect DUT and testcase
+  //////////////////////////////////////////////////////////////////////////////
+  adder_4_bit_interface adder_4_bit_intf(clk,reset);
+  
+  //////////////////////////////////////////////////////////////////////////////
+  /*********************adder_4_bit DUT Instantation **********************************/
+  //////////////////////////////////////////////////////////////////////////////
+
+
+  adder_4_bit dut_inst(
+                          .x(adder_4_bit_intf.x),
+			  .y(adder_4_bit_intf.y),
+			  .cin(adder_4_bit_intf.cin),
+			  .sum(adder_4_bit_intf.sum),
+			  .cout(adder_4_bit_intf.cout)
+                         );
+
+
+  
+  //////////////////////////////////////////////////////////////////////////////
+  /*********************starting the execution uvm phases**********************/
+  //////////////////////////////////////////////////////////////////////////////
+  initial begin
+//    run_test("adder_4_bit_basic_test");
+    run_test();
+  end
+  //////////////////////////////////////////////////////////////////////////////
+  /**********Set the Interface instance Using Configuration Database***********/
+  //////////////////////////////////////////////////////////////////////////////
+  initial begin
+   uvm_config_db#(virtual adder_4_bit_interface)::set(uvm_root::get(),"*","intf",adder_4_bit_intf);
+  end
+
+endmodule
+
+`endif
+
+
+
