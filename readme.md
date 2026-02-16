@@ -30,5 +30,6 @@ adder_4bit_verification/
     │       ├── adder_4_bit_basic_seq.sv
     │       └── adder_4_bit_seq_list.sv
     └── src/
-        ├── adder_4_bit
+        ├── adder_4_bit_basic_test.sv
+        └── adder_4_bit_test_list.sv
 ```
